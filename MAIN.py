@@ -1,64 +1,69 @@
-import pygame, json
-from pygame.locals import *
-from random import randint, choice
-from sys import exit
+import pygame
+import sys
+import asyncio
+from modules import *
 
-### initialization & base constants
-pygame.init()
-pygame.mixer.pre_init(44100, 16, 2, 4096)
 
-WIDTH = 1024
-HEIGHT = 768
+class Master:
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+    def __init__(self):
 
-pygame.display.set_caption('This is a template'.upper())
+        self.app:App
+        self.debug:Debug
+        self.dt:float
+        self.offset:pygame.Vector2
 
-CLOCK = pygame.time.Clock()
 
-### main game func/loop
-def MAIN():
+class App:
 
-    RUN = True
+    MAIN_MENU = 0
+    IN_GAME = 1
 
-    while RUN:
+    def __init__(self):
 
-        WINDOW.fill((100,100,255))
+        pygame.init()
+        self.screen = pygame.display.set_mode((W, H), pygame.SCALED)
+        pygame.display.set_caption(NAME)
+        # icon = pygame.image.load("graphics/icon.png").convert()
+        # pygame.display.set_icon(icon)
+        self.clock = pygame.Clock()
 
-        for event in pygame.event.get():
+        self.state = self.IN_GAME
 
-            match event.type:
+        self.master = Master()
+        self.debug = Debug(font_size=16)
+        self.master.debug = self.debug
+        self.game = Game(self.master)
 
-                case pygame.QUIT:
+    async def run(self):
+        
+        while True:
+
+            pygame.display.flip()
+            self.master.dt = self.clock.tick(FPS) / 16.667
+            if self.master.dt > 10:
+                self.master.dt = 10
+            self.debug("FPS", round(self.clock.get_fps(), 2))
+
+            for event in pygame.event.get((pygame.QUIT)):
+                
+                if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit()
 
-                case pygame.KEYDOWN:
+            await asyncio.sleep(0)
 
-                    match event.key:
+            self.run_states()
+            self.debug.draw()
 
-                        case pygame.K_a | pygame.K_LEFT:
-                            print('LEFT')
-                        case pygame.K_d | pygame.K_RIGHT:
-                            print('RIGHT')
-            
-            match event.type:
+    def run_states(self):
 
-                case pygame.KEYUP:
-
-                    match event.key:
-                        case pygame.K_ESCAPE:
-                            pygame.quit()
-                            exit()
-
-                    match event.key:
-                        case pygame.K_a | pygame.K_LEFT:
-                            print('LEFT RELEASED')
-                        case pygame.K_d | pygame.K_RIGHT:
-                            print('RIGHT RELEASED')
+        if self.state == self.MAIN_MENU:
+            self.main_menu.run()
+        elif self.state == self.IN_GAME:
+            self.game.run()
 
 
-        pygame.display.flip()
-
-### Call to MAIN game func to run game
-MAIN() if __name__ == '__main__' else print('Not Main')
+if __name__ == "__main__":
+    app = App()
+    asyncio.run(app.run())
