@@ -1,0 +1,2 @@
+pygame-ce==2.2.0
+pytmx==3.31
