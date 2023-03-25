@@ -23,7 +23,7 @@ def MAIN():
 
     while RUN:
 
-        #WINDOW.fill((50,50,255))
+        WINDOW.fill((100,100,255))
 
         for event in pygame.event.get():
 
@@ -36,7 +36,6 @@ def MAIN():
 
                 if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                     print('LEFT')
-
                 elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     print('RIGHT')
             
@@ -48,7 +47,6 @@ def MAIN():
 
                 elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                     print('LEFT RELEASED')
-
                 elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     print('RIGHT RELEASED')
 
