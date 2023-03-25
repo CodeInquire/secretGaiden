@@ -3,7 +3,7 @@ from pygame.locals import *
 from random import randint, choice
 from sys import exit
 
-### Initialization and base variable constants
+### initialization & base constants
 pygame.init()
 pygame.mixer.pre_init(44100, 16, 2, 4096)
 
@@ -16,7 +16,7 @@ pygame.display.set_caption('This is a template'.upper())
 
 CLOCK = pygame.time.Clock()
 
-### Main game func/loop
+### main game func/loop
 def MAIN():
 
     RUN = True
@@ -27,28 +27,35 @@ def MAIN():
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
+            match event.type:
 
-                pygame.quit()
-                exit()
-
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    print('LEFT')
-                elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    print('RIGHT')
-            
-            if event.type == pygame.KEYUP:
-
-                if event.key == pygame.K_ESCAPE:
+                case pygame.QUIT:
                     pygame.quit()
                     exit()
 
-                elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    print('LEFT RELEASED')
-                elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    print('RIGHT RELEASED')
+                case pygame.KEYDOWN:
+
+                    match event.key:
+
+                        case pygame.K_a | pygame.K_LEFT:
+                            print('LEFT')
+                        case pygame.K_d | pygame.K_RIGHT:
+                            print('RIGHT')
+            
+            match event.type:
+
+                case pygame.KEYUP:
+
+                    match event.key:
+                        case pygame.K_ESCAPE:
+                            pygame.quit()
+                            exit()
+
+                    match event.key:
+                        case pygame.K_a | pygame.K_LEFT:
+                            print('LEFT RELEASED')
+                        case pygame.K_d | pygame.K_RIGHT:
+                            print('RIGHT RELEASED')
 
 
         pygame.display.flip()
